@@ -13,7 +13,7 @@ import java.util.Vector;
 
 /**
  *
- * @author a20092101
+ * @author Brayan Rodriguez
  */
 public class Combinacion {
     public String origen ; 

@@ -19,7 +19,7 @@ import jdk.nashorn.internal.objects.NativeArray;
 
 /**
  *
- * @author a20092101
+ * @author Brayan
  */
 
 public class GeneracionDatosAleatorio {
