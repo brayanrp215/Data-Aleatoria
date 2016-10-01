@@ -18,6 +18,7 @@ import java.util.Vector;
 public class Combinacion {
     public String origen ; 
     public String destino ; 
+    public int numeroOrdenesPosibles; 
     public Combinacion(String origen, String destino){
         this.origen = origen ; 
         this.destino = destino; 

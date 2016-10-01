@@ -27,8 +27,40 @@ public class OrdenDeEnvio {
     public String origen ;
     public String destino ;
     public Date fecha_registro ; 
+    public int minutos ; // minutos Totales 
+    public int dia;
+    public int mes ; 
+    public int anio ; 
+    public int hora ; 
+    public int minuto ; 
+    
     
     //System.out.println(r);
+    public OrdenDeEnvio(String origen , String destion, int minutos, int anio, int mes, int dia){
+        this.origen = origen ; 
+        this.destino  = destion; 
+        this.minutos = minutos ; 
+        
+        this.dia = dia ; 
+        this.mes = mes ; 
+        this.anio = anio ; 
+        
+        
+        //Calculo de la fecha
+        Calendar cal = Calendar.getInstance(); 
+        int horaIni=  minutos / 60 ;
+        int minuIni = minutos % 60 ; 
+        
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);                                
+        cal.set(Calendar.HOUR_OF_DAY, horaIni );
+        cal.set(Calendar.MINUTE, minuIni);        
+        cal.set(anio, mes, dia);                
+        this.fecha_registro = cal.getTime();   
+        this.hora = horaIni;
+        this.minuto = minuIni;
+    }
+
     public OrdenDeEnvio(String linea_leida){
         String[] ss = linea_leida.split("-");
         

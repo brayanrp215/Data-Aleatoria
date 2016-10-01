@@ -11,6 +11,11 @@ import dp1_grupo8.clases.OrdenDeEnvio;
 import dp1_grupo8.clases.Vuelo;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Random;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,13 +30,29 @@ import jdk.nashorn.internal.objects.NativeArray;
 public class GeneracionDatosAleatorio {
     
     
-         
+    
     public static void main(String[] args) {         
         try {
+               
+            // Parametros 
             
+            
+            int dia = 01 ;
+            int mes = 10; 
+            int anio = 2016; 
+            int cant_min_paquetes = 30 ; 
+            int cant_max_paquetes = 50 ;
+                        
+            int minutos_min_entrada = 12*60 ; 
+            int minutos_max_entrada = 18*60 ; 
+            
+            
+            ArrayList<OrdenDeEnvio> listaOrdenesEnvios = new ArrayList<OrdenDeEnvio>();            
             Vector<Ciudad> ciudades =  Ciudad.leerCiudades("./_aeropuertos.OACI.txt");
             Vector<Combinacion> combinaciones_rutas_prohibidas = Combinacion.leerCombinaciones("./_rutas_prohibidas.txt");   
-            Vector<Combinacion> combinaciones_rutas_filtradas = Permutacion2(ciudades,combinaciones_rutas_prohibidas );   
+            Vector<Combinacion> combinaciones_rutas_filtradas = Combinacion_rutas_y_cantidad_posible_x_ruta(ciudades,combinaciones_rutas_prohibidas, cant_min_paquetes,cant_max_paquetes);
+            generacion_ordenes_aleatorio(combinaciones_rutas_filtradas, minutos_min_entrada, minutos_max_entrada, listaOrdenesEnvios,dia, mes ,anio); 
+            
             
            /*
                 for( int i =0; i< combinaciones_rutas_prohibidas.size() ; i++) {
@@ -50,22 +71,63 @@ public class GeneracionDatosAleatorio {
              // Comprobacion de lectura de combinaciones 
              
              
-             for( int i =0; i< combinaciones_rutas_filtradas.size() ; i++) {
+             /*for( int i =0; i< combinaciones_rutas_filtradas.size() ; i++) {
                  Combinacion comb = combinaciones_rutas_filtradas.get(i);
-                 System.out.println(comb.origen + " " + comb.destino );                   
+                 System.out.println(comb.origen + " " + comb.destino + " " + comb.numeroOrdenesPosibles); 
               }  
               System.out.println("Cantidad de Combinaciones "+ combinaciones_rutas_filtradas.size());
-             
+             */
               
         } catch (IOException ex){                        
               System.out.println("Error en el Bucle Principal Generación de Data Aleatoria");
         }
     }  
     
-    private static Vector<Combinacion>  Permutacion2(Vector<Ciudad> ciudades, Vector<Combinacion> combinaciones_rutas_prohibidas) {
+    private static void generacion_ordenes_aleatorio(Vector<Combinacion> combinaciones_rutas_posibles , int hora_min, int hora_max, ArrayList<OrdenDeEnvio> listaNueva, int dia, int mes , int anio){
+          int numerOrdenes ; 
+          Random r = new Random();
+          int Low = hora_min;
+          int High = hora_max;          
+          int cant = 0 ; 
+          
+          for( int i =0; i< combinaciones_rutas_posibles.size() ; i++) {
+                 Combinacion comb = combinaciones_rutas_posibles.get(i);
+                 numerOrdenes = comb.numeroOrdenesPosibles;                 
+                 for (int j=0; j < numerOrdenes; j++){     
+                     int cant_minutos = r.nextInt(High-Low) + Low;
+                     cant= cant + 1; 
+                     listaNueva.add(new OrdenDeEnvio(comb.origen, comb.destino, cant_minutos, anio, mes, dia));                                           
+                    // listaNueva.sort(OrdenDeEnvio,new Comp);
+                     Collections.sort(listaNueva, new Comparator<OrdenDeEnvio>(){
+                	@Override
+			public int compare(OrdenDeEnvio o1, OrdenDeEnvio o2) {
+                                if (o1.minutos >= o2.minutos) 
+                                     return 1; 
+                                else return -1;
+			}
+		     });
+                 }                                  
+          }          
+          
+          OrdenDeEnvio oe ; 
+          for (int i = 0 ; i < listaNueva.size() ; i++){
+              oe = listaNueva.get(i);
+      //System.out.printf("El cuadrado de %.2f es %.2f\n", 1, 1*1);
+      System.out.printf("%s-%s-%02d-%02d-%4d-%02d:%02d\n",oe.origen,oe.destino,oe.dia,oe.mes,oe.anio,oe.hora,oe.minuto);
+      // System.out.printf(oe.origen + "-" + oe.destino + "-" + oe.dia +"-"+ oe.mes +"-" + oe.anio +"-"+ oe.hora +":"+ oe.minuto);
+          }
+          System.out.println(cant);
+         
+    }   
+    private static Vector<Combinacion>  Combinacion_rutas_y_cantidad_posible_x_ruta(Vector<Ciudad> ciudades, Vector<Combinacion> combinaciones_rutas_prohibidas, int min_paquetes, int max_paquetes) {
           Vector<Combinacion> combinaciones = new Vector<Combinacion>();
           Ciudad  ciudad_i = null , ciudad_j = null;
           String codigo_i, codigo_j ; 
+          
+          //  Generacion del  Ramdom 
+          Random r = new Random();
+          int Low = min_paquetes;
+          int High = max_paquetes;          
           
           for( int i =0; i< ciudades.size() ; i++) {
                   ciudad_i = ciudades.get(i);
@@ -74,8 +136,11 @@ public class GeneracionDatosAleatorio {
                          ciudad_j = ciudades.get(j);
                          codigo_j = ciudad_j.codigo ;                          
                          if (codigo_i.compareTo(codigo_j) != 0){
-                             if (!se_encuentra(codigo_i,codigo_j,combinaciones_rutas_prohibidas))
-                                   combinaciones.add(new Combinacion(codigo_i, codigo_j));                         
+                             if (!se_encuentra(codigo_i,codigo_j,combinaciones_rutas_prohibidas)){
+                                  Combinacion comb = new Combinacion(codigo_i, codigo_j);
+                                  comb.numeroOrdenesPosibles = r.nextInt(High-Low) + Low;
+                                  combinaciones.add(comb);
+                                }
                          }
                     }                    
           }  
