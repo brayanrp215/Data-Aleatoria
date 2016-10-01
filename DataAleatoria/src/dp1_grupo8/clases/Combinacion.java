@@ -3,19 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication2;
+package dp1_grupo8.clases;
 
 /**
  *
  * @author a20092101
  */
-public class JavaApplication2 {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class Combinacion {
+    public String origen ; 
+    public String destino ; 
+    public Combinacion(String origen, String destino){
+        this.origen = origen ; 
+        this.destino = destino; 
     }
-    
 }
