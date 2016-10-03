@@ -39,14 +39,14 @@ public class GeneracionDatosAleatorio {
             // Parametros 
             
             // Datos a configurar 
-            int dia = 01 ;
+            int dia = 03 ;
             int mes = 10; 
             int anio = 2016; 
-            int cant_min_paquetes = 10 ; 
-            int cant_max_paquetes = 20 ;
+            int cant_min_paquetes = 80 ; 
+            int cant_max_paquetes = 100;
                         
-            int minutos_min_entrada = 12*60 ;  // 12 horas 
-            int minutos_max_entrada = 13*60 ;  // 18 horas 
+            int minutos_min_entrada = 12*60 ;  // 
+            int minutos_max_entrada = 19*60 ;  // 
             
             String nombre_archivo = "ordenes envio.txt" ; 
             
@@ -57,9 +57,42 @@ public class GeneracionDatosAleatorio {
             Vector<Combinacion> combinaciones_rutas_prohibidas = Combinacion.leerCombinaciones("./_rutas_prohibidas.txt");   
             // Primera generacion de datos
             Vector<Combinacion> combinaciones_rutas_filtradas = Combinacion_rutas_y_cantidad_posible_x_ruta(ciudades,combinaciones_rutas_prohibidas, cant_min_paquetes,cant_max_paquetes);                        
+            cant_min_paquetes = 10 ; 
+            cant_max_paquetes = 30;                        
+            minutos_min_entrada = 12*60 ;  // 
+            minutos_max_entrada = 14*60 ;  //             
+
             combinaciones_rutas_filtradas = Combinacion_rutas_y_cantidad_posible_x_ruta(ciudades,combinaciones_rutas_prohibidas, cant_min_paquetes,cant_max_paquetes);
             generacion_ordenes_aleatorio(combinaciones_rutas_filtradas, minutos_min_entrada, minutos_max_entrada, listaOrdenesEnvios,dia, mes ,anio); 
-            /*
+            
+            cant_min_paquetes = 30 ; 
+            cant_max_paquetes = 50;                        
+            minutos_min_entrada = 14*60 ;  // 
+            minutos_max_entrada = 16*60 ;  //             
+            combinaciones_rutas_filtradas = Combinacion_rutas_y_cantidad_posible_x_ruta(ciudades,combinaciones_rutas_prohibidas, cant_min_paquetes,cant_max_paquetes);
+            generacion_ordenes_aleatorio(combinaciones_rutas_filtradas, minutos_min_entrada, minutos_max_entrada, listaOrdenesEnvios,dia, mes ,anio); 
+
+            cant_min_paquetes = 50 ; 
+            cant_max_paquetes = 70;                        
+            minutos_min_entrada = 16*60 ;  // 
+            minutos_max_entrada = 18*60 ;  //             
+
+            combinaciones_rutas_filtradas = Combinacion_rutas_y_cantidad_posible_x_ruta(ciudades,combinaciones_rutas_prohibidas, cant_min_paquetes,cant_max_paquetes);
+            generacion_ordenes_aleatorio(combinaciones_rutas_filtradas, minutos_min_entrada, minutos_max_entrada, listaOrdenesEnvios,dia, mes ,anio); 
+            
+            generar_archivo_datos(listaOrdenesEnvios, nombre_archivo);         
+            System.out.println(combinaciones_rutas_filtradas.size());
+           
+           
+              
+           /*
+                for( int i =0; i< combinaciones_rutas_prohibidas.size() ; i++) {
+                 Combinacion comb = combinaciones_rutas_prohibidas.get(i);
+                  System.out.println(comb.origen + " " + comb.destino); 
+                }
+                
+            */
+                 /*
             // Segunda generacion de datos 
              cant_min_paquetes = 10 ; 
              cant_max_paquetes = 20 ;
@@ -70,16 +103,7 @@ public class GeneracionDatosAleatorio {
             generacion_ordenes_aleatorio(combinaciones_rutas_filtradas, minutos_min_entrada, minutos_max_entrada, listaOrdenesEnvios,dia, mes ,anio);  
             
             */
-            generar_archivo_datos(listaOrdenesEnvios, nombre_archivo);
-            
-           /*
-                for( int i =0; i< combinaciones_rutas_prohibidas.size() ; i++) {
-                 Combinacion comb = combinaciones_rutas_prohibidas.get(i);
-                  System.out.println(comb.origen + " " + comb.destino); 
-                }
-                
-            */
-           System.out.println(combinaciones_rutas_filtradas.size());
+                 
             /*// Comprobacion lectura ciudades 
                 for( int i =0; i< ciudades.size() ; i++) {
                  Ciudad ciudad_leida = ciudades.get(i);
